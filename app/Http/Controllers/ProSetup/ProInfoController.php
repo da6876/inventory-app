@@ -3,13 +3,10 @@
 namespace App\Http\Controllers\ProSetup;
 
 use App\Http\Controllers\Controller;
-use App\Models\ProSetup\ProCategory;
 use App\Models\ProSetup\ProInfo;
 use App\Models\ProSetup\ProSubCategory;
 use App\Models\ProSetup\ProType;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -19,7 +16,6 @@ class ProInfoController extends Controller
     {
         return view('ProConfig.pro_info');
     }
-
     public function store(Request $request){
         try {
             if ($request['id']==""){
@@ -39,7 +35,16 @@ class ProInfoController extends Controller
                 if ($validator->fails()) {
                     return response()->json(['statusCode' => 204,'statusMsg' => 'Validation Error.', 'errors' => $validator->errors()]);
                 }
-
+                if ($request->hasFile('pro_image1')) {
+                    $ran_one = uniqid();
+                    $ext_one = strtolower($request->pro_image1->getClientOriginalExtension());
+                    $one_full_name = $ran_one . '.' . $ext_one;
+                    $upload_path_one = "assets/product_img/";
+                    $image1fileUrl = $upload_path_one . $one_full_name;
+                    $request->pro_image1->move($upload_path_one, $one_full_name);
+                } else {
+                    $image1fileUrl = "";
+                }
                 ProInfo::create([
                     'uid' => Str::uuid(),
                     'name' =>$request->i_name,
@@ -54,7 +59,7 @@ class ProInfoController extends Controller
                     'rp_unit' =>$request->rp_unit? :'0',
                     'mrp_unit' =>$request->mrp_unit? :'0',
                     'pro_sku_code' =>'SKU-' . strtoupper(bin2hex(random_bytes(4))),
-                    'pro_image1' =>$request->pro_image1? :'No Image',
+                    'pro_image1' =>$image1fileUrl? :'No Image',
                     'pro_image2' =>$request->pro_image2? :'No Image',
                     'status' =>$request->status,
                     'create_by' => auth()->user()->id,
@@ -94,7 +99,20 @@ class ProInfoController extends Controller
                 if ($validator->fails()) {
                     return json_encode(array('statusCode' => 204,'statusMsg' => 'Validation Error.', 'errors' => $validator->errors()));
                 }
-
+                if ($request->hasFile('pro_image1')) {
+                    $oldImage = $rowData->pro_image1;
+                    if ($oldImage && file_exists(public_path($oldImage))) {
+                        unlink(public_path($oldImage));
+                    }
+                    $ran_one = uniqid();
+                    $ext_one = strtolower($request->pro_image1->getClientOriginalExtension());
+                    $one_full_name = $ran_one . '.' . $ext_one;
+                    $upload_path_one = "assets/product_img/";
+                    $image1fileUrl = $upload_path_one . $one_full_name;
+                    $request->pro_image1->move($upload_path_one, $one_full_name);
+                } else {
+                    $image1fileUrl = $rowData->pro_image1;
+                }
                 $rowData->update([
                     'name' =>$request->i_name,
                     'pro_type_id' =>$request->pro_type_id,
@@ -107,7 +125,7 @@ class ProInfoController extends Controller
                     'dp_unit' =>$request->dp_unit? :'0',
                     'rp_unit' =>$request->rp_unit? :'0',
                     'mrp_unit' =>$request->mrp_unit? :'0',
-                    'pro_image1' =>$request->pro_image1? :'No Image',
+                    'pro_image1' =>$image1fileUrl,
                     'pro_image2' =>$request->pro_image2? :'No Image',
                     'status' =>$request->status,
                     'update_by' => auth()->user()->id,

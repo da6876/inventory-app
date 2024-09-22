@@ -75,24 +75,33 @@
                     <form id="addRoleForm" class="row g-3" onsubmit="return false">
                         @csrf
                         <input type="hidden" name="id" id="id"/>
-                        <div class="row g-2">
+                        <div class="row g-1">
                             <div class="col mb-1">
                                 <label class="form-label" for="i_name">Name</label>
                                 <input type="text" id="i_name" name="i_name" class="form-control" placeholder="Enter Name" tabindex="-1"/>
-                                <div class="invalid-feedback"></div>
-                            </div>
-                            <div class="col mb-1">
-                                <label class="form-label" for="i_email">Email</label>
-                                <input type="text" id="i_email" name="i_email" class="form-control" placeholder="Enter email"/>
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
 
 
                         <div class="row g-2">
+                            <div class="col mb-1">
+                                <label class="form-label" for="i_email">Email</label>
+                                <input type="text" id="i_email" name="i_email" class="form-control" placeholder="Enter email"/>
+                                <div class="invalid-feedback"></div>
+                            </div>
                             <div class="col mb-1" id="pass">
                                 <label class="form-label" for="password">Password</label>
                                 <input type="password" id="password" name="password" class="form-control" placeholder="Enter Password"/>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+                        <div class="row g-2">
+                            <div class="col mb-1">
+                                <label class="form-label">User Type</label>
+                                <select class="form-select" name="type_id" id="type_id">
+                                    <option  value="">Select Type</option>
+                                </select>
                                 <div class="invalid-feedback"></div>
                             </div>
                             <div class="col mb-1">
@@ -149,9 +158,8 @@
                         data: null,
                         render: function (data, type, row) {
                             return `
-                            <button class="btn btn-info btn-sm edit-btn" data-id="${row.id}">Edit</button>
-                            <button class="btn btn-primary btn-sm update-btn" data-id="${row.id}">Update</button>
-                            <button class="btn btn-danger btn-sm delete-btn" data-id="${row.id}">Delete</button>
+                                <button type="button" class="btn btn-outline-success btn-sm btn-icon-text edit-btn" data-id="${row.id}"><i class="typcn typcn-edit btn-icon-append"></i></button>
+                                <button type="button" class="btn btn-outline-danger btn-sm btn-icon-text delete-btn" data-id="${row.id}"><i class="typcn typcn-delete-outline btn-icon-append"></i></button>
                         `;
                         },
                         orderable: false,
@@ -293,5 +301,32 @@
             });
             return false;
         };
+
+        $.ajax({
+            url: "{{ url('getRolesList') }}",
+            method: 'GET',
+            success: function(data) {
+                var $select = $('#type_id');
+                if (Array.isArray(data) && data.length > 0) {
+                    $select.empty();
+                    $select.append('<option value="">Select a Type</option>');
+                    $.each(data, function(index, item) {
+                        $select.append($('<option>', {
+                            value: item.id,
+                            text: item.name
+                        }));
+                    });
+                }else{
+                    $select.empty();
+                    $select.append('<option value="">Select a Type</option>');
+                }
+            },
+            error: function(xhr) {
+                Swal.fire({
+                    icon: "error",
+                    text: 'An error occurred:', xhr,
+                });
+            }
+        });
     </script>
 @endsection

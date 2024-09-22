@@ -133,8 +133,8 @@
                         data: null,
                         render: function (data, type, row) {
                             return `
-                                <button class="btn btn-info btn-sm edit-btn" data-id="${row.uid}">Edit</button>
-                                <button class="btn btn-danger btn-sm delete-btn" data-id="${row.uid}">Delete</button>
+                                <button type="button" class="btn btn-outline-success btn-sm btn-icon-text edit-btn" data-id="${row.uid}"><i class="typcn typcn-edit btn-icon-append"></i></button>
+                                <button type="button" class="btn btn-outline-danger btn-sm btn-icon-text delete-btn" data-id="${row.uid}"><i class="typcn typcn-delete-outline btn-icon-append"></i></button>
                             `;
                         },
                         orderable: false,

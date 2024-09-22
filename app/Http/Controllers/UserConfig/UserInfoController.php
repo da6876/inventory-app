@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\UserConfig;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Models\auth\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -22,21 +22,23 @@ class UserInfoController extends Controller
     public function store(Request $request){
         try {
 
-            if ($request['id']==""){
 
+
+            if ($request['id']==""){
                 $validator = Validator::make($request->all(), [
                     'i_name' => 'required',
                     'i_email' => 'required',
+                    'type_id' => 'required',
+                    'password' => 'required',
                     'status' => 'required',
                 ]);
 
                 if ($validator->fails()) {
-                    //return json_encode(array('statusCode' => 204,'statusMsg' => 'Validation Error.', 'errors' => $validator->errors()));
-                     return response()->json(['statusCode' => 204,'statusMsg' => 'Validation Error.', 'errors' => $validator->errors()]);
+                    return response()->json(['statusCode' => 204,'statusMsg' => 'Validation Error.', 'errors' => $validator->errors()]);
                 }
-
                 User::create([
                     'uid' => Str::uuid(),
+                    'role_id' =>$request->type_id,
                     'name' =>$request->i_name,
                     'email' =>$request->i_email,
                     'password' =>Hash::make($request->password),
@@ -74,17 +76,17 @@ class UserInfoController extends Controller
                 $validator = Validator::make($request->all(), [
                     'i_name' => 'required',
                     'i_email' => 'required',
+                    'type_id' => 'required',
                     'status' => 'required',
                 ]);
-
                 if ($validator->fails()) {
-                    return json_encode(array('statusCode' => 204,'statusMsg' => 'Validation Error.', 'errors' => $validator->errors()));
+                    return response()->json(['statusCode' => 204,'statusMsg' => 'Validation Error.', 'errors' => $validator->errors()]);
                 }
 
                 $navItem->update([
                     'name' =>$request->i_name,
                     'email' =>$request->i_email,
-                    'email' =>$request->i_email,
+                    'role_id' =>$request->type_id,
                     'status' =>$request->status,
                     'update_by' => auth()->user()->id,
                     'update_date' => $this->getCurrentDateTime()
@@ -146,6 +148,16 @@ class UserInfoController extends Controller
         return $letters . $digits;
     }
 
+    public function getUserList()
+    {
+        $users = User::where('status', '!=', 'Deleted')->get();
+        return response()->json($users);
+    }
+    public function getDisUserList()
+    {
+        $users = User::where('status', '!=', 'Deleted')->where('role_id', '=','11050004')->get();
+        return response()->json($users);
+    }
     public function getUserData(Request $request)
     {
         if ($request->ajax()) {

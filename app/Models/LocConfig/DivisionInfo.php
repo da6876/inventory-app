@@ -7,5 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class DivisionInfo extends Model
 {
-    use HasFactory;
+
+    public $timestamps = false;
+
+    protected $table = 'soc_divisions';
+
+    protected $fillable = ['id','uid','name', 'status','create_by','create_date','update_by','update_date'];
 }

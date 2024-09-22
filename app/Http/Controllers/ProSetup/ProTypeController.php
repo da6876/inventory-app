@@ -10,12 +10,17 @@ use Illuminate\Support\Str;
 
 class ProTypeController extends Controller
 {
-
+    public function __construct()
+    {
+        $this->middleware('permission:pro_type_view')->only('index', 'getData');
+        $this->middleware('permission:pro_type_create')->only('store');
+        $this->middleware('permission:pro_type_edit')->only('store', 'show');
+        $this->middleware('permission:pro_type_delete')->only('destroy');
+    }
     public function index()
     {
         return view('ProConfig.pro_type');
     }
-
     public function store(Request $request){
         try {
             if ($request['id']==""){
@@ -30,13 +35,13 @@ class ProTypeController extends Controller
                 }
 
                 ProType::create([
-                    'uid' => Str::uuid(),
-                    'name' =>$request->i_name,
-                    'status' =>$request->status,
+                    'uid' => (string) Str::uuid(),
+                    'name' => $request->i_name,
+                    'status' => $request->status,
                     'create_by' => auth()->user()->id,
-                    'update_by' => '0',
                     'create_date' => $this->getCurrentDateTime(),
-                    'update_date' => '0'
+                    'update_by' => null,
+                    'update_date' => null
                 ]);
 
                 return response()->json([
@@ -86,7 +91,6 @@ class ProTypeController extends Controller
             ]);
         }
     }
-
     public function destroy($id){
         try {
             $rowData = ProType::where('uid', $id)->firstOrFail();
@@ -107,7 +111,6 @@ class ProTypeController extends Controller
             ));;
         }
     }
-
     public function show($id)
     {
         try {
@@ -121,7 +124,6 @@ class ProTypeController extends Controller
             ]);
         }
     }
-
     public function getData(Request $request)
     {
         if ($request->ajax()) {

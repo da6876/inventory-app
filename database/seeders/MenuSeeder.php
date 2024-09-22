@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\Menu;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Menu\Menu;
 use Illuminate\Database\Seeder;
+
 class MenuSeeder extends Seeder
 {
     public function run()

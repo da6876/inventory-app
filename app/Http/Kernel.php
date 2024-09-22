@@ -22,7 +22,6 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
     ];
-
     /**
      * The application's route middleware groups.
      *
@@ -43,15 +42,15 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
+
     ];
 
-    /**
-     * The application's middleware aliases.
-     *
-     * Aliases may be used to conveniently assign middleware to routes and groups.
-     *
-     * @var array<string, class-string|string>
-     */
+
+    protected $routeMiddleware = [
+        // Other middleware...
+        'role' => \App\Http\Middleware\RoleMiddleware::class,
+        'permission' => \App\Http\Middleware\PermissionMiddleware::class,
+    ];
     protected $middlewareAliases = [
         'auth' => \App\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,

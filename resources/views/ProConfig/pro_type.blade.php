@@ -124,8 +124,8 @@
                         data: null,
                         render: function (data, type, row) {
                             return `
-                                <button class="btn btn-info btn-sm edit-btn" data-id="${row.uid}">Edit</button>
-                                <button class="btn btn-danger btn-sm delete-btn" data-id="${row.uid}">Delete</button>
+                                <button type="button" class="btn btn-outline-success btn-sm btn-icon-text edit-btn" data-id="${row.uid}"><i class="typcn typcn-edit btn-icon-append"></i></button>
+                                <button type="button" class="btn btn-outline-danger btn-sm btn-icon-text delete-btn" data-id="${row.uid}"><i class="typcn typcn-delete-outline btn-icon-append"></i></button>
                             `;
                         },
                         orderable: false,
@@ -179,7 +179,10 @@
                                 $('#usersTable').DataTable().ajax.reload();
                             },
                             error: function(xhr) {
-                                alert('Delete failed: ' + xhr.responseText);
+                                Swal.fire({
+                                    icon: "error",
+                                    text: 'Delete failed: ' + xhr.responseText,
+                                });
                             }
                         });
 
@@ -222,9 +225,11 @@
 
                     }
                 }, error: function (data) {
+                    var response = JSON.parse(data.responseText); // Parse the JSON response
+
                     Swal.fire({
-                        text: "Internal Server Error",
-                        icon: "question"
+                        text: response.statusMsg || "Internal Server Error", // Use the status message or a default
+                        icon: "error" // Use an appropriate icon
                     });
                 }
             });
@@ -236,9 +241,6 @@
             $("#addModal input[type='hidden']").not("[name='_token']").each(function() {
                 $(this).val('');
             });
-            $("#addModal").modal("show");
-            $("#pass").hide();
-
             $.ajax({
                 url: "{{ url('ProType') }}" + '/' + id,
                 type: "GET",
@@ -250,12 +252,12 @@
                     $('#id').val(data.uid);
                     $('#i_name').val(data.name);
                     $('#status').val(data.status);
-                }, error: function () {
-                    swal({
-                        title: "Oops",
-                        text: "Error Occured",
-                        icon: "error",
-                        timer: '1500'
+                }, error: function (data) {
+                    var response = JSON.parse(data.responseText); // Parse the JSON response
+
+                    Swal.fire({
+                        text: response.statusMsg || "Internal Server Error", // Use the status message or a default
+                        icon: "error" // Use an appropriate icon
                     });
                 }
             });

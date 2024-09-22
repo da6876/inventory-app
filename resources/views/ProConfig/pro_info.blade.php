@@ -1,5 +1,15 @@
 @section('title',"Pro. Info")
 @extends('layout.app')
+@section('style')
+    <style>
+        img{
+            max-width:180px;
+        }
+        input[type=file]{
+            padding:10px;
+            background:#2d2d2d;}
+    </style>
+@endsection
 @section('main')
     <div class="content-wrapper">
         <div class="row">
@@ -87,7 +97,7 @@
                             </div>
                         </div>
 
-                        <div class="row g-3">
+                        <div class="row g-2">
                             <div class="col mb-1">
                                 <label class="form-label">Select Pro Type</label>
                                 <select class="form-select" name="pro_type_id" id="pro_type_id">
@@ -124,10 +134,14 @@
 
                         <div class="row g-2">
 
-                            <div class="col mb-2">
+                            <div class="col mb-1">
                                 <label class="form-label" for="pro_image1"> Pro Image 1</label>
-                                <input type="text" id="pro_image1" name="pro_image1" class="form-control" placeholder="Enter Name" tabindex="-1"/>
+                                <input type='file' id="pro_image1" name="pro_image1" class="form-control" onchange="readURL(this);" />
                                 <div class="invalid-feedback"></div>
+                            </div>
+
+                            <div class="col mb-1">
+                                <img id="blah" src="http://placehold.it/180" alt="your image" width="180px" />
                             </div>
                             <div class="col mb-1">
                                 <label class="form-label">Select Status</label>
@@ -155,6 +169,15 @@
 @section('script')
 
     <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#blah').attr('src', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
         function showModal() {
             $("#addModal form")[0].reset();
             $("#addModal input[type='hidden']").not("[name='_token']").each(function() {
@@ -186,8 +209,8 @@
                         data: null,
                         render: function (data, type, row) {
                             return `
-                                <button class="btn btn-info btn-sm edit-btn" data-id="${row.uid}">Edit</button>
-                                <button class="btn btn-danger btn-sm delete-btn" data-id="${row.uid}">Delete</button>
+                                <button type="button" class="btn btn-outline-success btn-sm btn-icon-text edit-btn" data-id="${row.uid}"><i class="typcn typcn-edit btn-icon-append"></i></button>
+                                <button type="button" class="btn btn-outline-danger btn-sm btn-icon-text delete-btn" data-id="${row.uid}"><i class="typcn typcn-delete-outline btn-icon-append"></i></button>
                             `;
                         },
                         orderable: false,
@@ -402,7 +425,7 @@
                             $subCategorySelect.append($('<option>', {
                                 value: item.id,
                                 text: item.name,
-                                selected: item.id == selectedSubcatId // Set the selected attribute if IDs match
+                                selected: item.id == selectedSubcatId
                             }));
                         });
                     }

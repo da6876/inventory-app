@@ -7,5 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class ThanaInfo extends Model
 {
-    use HasFactory;
+
+    public $timestamps = false;
+
+    protected $table = 'soc_thana';
+
+    protected $fillable = ['id','uid','div_id','dis_id','name', 'status','create_by','create_date','update_by','update_date'];
 }

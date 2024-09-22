@@ -8,7 +8,7 @@
                     <div class="card-body border-bottom">
                         <div class="d-flex justify-content-between align-items-center flex-wrap">
                             <h6 class="mb-2 mb-md-0 text-uppercase fw-medium">Pro. Category</h6>
-                            <button class="btn btn-success btn-sm " type="button" onclick="showModal()"><i
+                            <button class="btn btn-success btn-sm addButton" type="button" onclick="showModal()"><i
                                     class="typcn typcn-plus"></i> Add New
                             </button>
 
@@ -124,8 +124,8 @@
                         data: null,
                         render: function (data, type, row) {
                             return `
-                                <button class="btn btn-info btn-sm edit-btn" data-id="${row.uid}">Edit</button>
-                                <button class="btn btn-danger btn-sm delete-btn" data-id="${row.uid}">Delete</button>
+                                <button type="button" class="btn btn-outline-success btn-sm btn-icon-text edit-btn" data-id="${row.uid}"><i class="typcn typcn-edit btn-icon-append"></i></button>
+                                <button type="button" class="btn btn-outline-danger btn-sm btn-icon-text delete-btn" data-id="${row.uid}"><i class="typcn typcn-delete-outline btn-icon-append"></i></button>
                             `;
                         },
                         orderable: false,

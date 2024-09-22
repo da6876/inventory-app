@@ -7,5 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class DistrictInfo extends Model
 {
-    use HasFactory;
+
+    public $timestamps = false;
+
+    protected $table = 'soc_districts';
+
+    protected $fillable = ['id','uid','div_id','name', 'status','create_by','create_date','update_by','update_date'];
 }

@@ -7,5 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserType extends Model
 {
-    use HasFactory;
+    public $timestamps = false;
+
+    protected $table = 'user_role';
+
+    protected $fillable = ['id','uid','name', 'status','create_by','create_date','update_by','update_date'];
+
 }
+
