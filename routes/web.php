@@ -15,11 +15,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/menus-by-role', [\App\Http\Controllers\UserConfig\SidebarController::class, 'getMenusByRole'])->middleware('auth');
         Route::get('getPrentMenu', [\App\Http\Controllers\UserConfig\SidebarController::class, 'getPrentMenu']);
 
-        Route::resource('menu-permission', \App\Http\Controllers\UserConfig\MenuPermissionController::class);
-        Route::get('getUserList', [\App\Http\Controllers\UserConfig\UserInfoController::class, 'getUserList']);
-        Route::get('getMenuList/{roleId}', [\App\Http\Controllers\UserConfig\SidebarController::class, 'getMenuList']);
-        Route::post('/menu-permission/data', [\App\Http\Controllers\UserConfig\MenuPermissionController::class, 'getData'])->name('menu-permission.data');
-
         Route::post('/logout', [\App\Http\Controllers\UserConfig\UserInfoController::class, 'logout'])->name('logout');
 
         Route::get('dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
@@ -27,10 +22,6 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::resource('UserInfo', \App\Http\Controllers\UserConfig\UserInfoController::class);
         Route::post('/users/data', [\App\Http\Controllers\UserConfig\UserInfoController::class, 'getUserData'])->name('users.data');
-
-        Route::resource('user-type', \App\Http\Controllers\UserConfig\UserTypeController::class);
-        Route::get('getUserTypeList', [\App\Http\Controllers\UserConfig\UserTypeController::class, 'getUserTypeList']);
-        Route::post('/user-type/data', [\App\Http\Controllers\UserConfig\UserTypeController::class, 'getData'])->name('user-type.data');
 
         Route::resource('roles', \App\Http\Controllers\UserConfig\RoleController::class);
         Route::get('/permission', [\App\Http\Controllers\UserConfig\RoleController::class, 'indexs']);

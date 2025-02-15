@@ -161,6 +161,20 @@ ALTER TABLE `product_info`
   MODIFY `product_id` INT(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11040000;
   
   ====================================================================================================================
+    CREATE TABLE `user_type` (
+  `id` INT(10) NOT NULL,
+  `uid` VARCHAR(100) NOT NULL,
+  `name` VARCHAR(100) NOT NULL,
+  `status` VARCHAR(10) NOT NULL,
+  `create_by` VARCHAR(10) NOT NULL,
+  `create_date` VARCHAR(20) NOT NULL,
+  `update_by` VARCHAR(10) DEFAULT NULL,
+  `update_date` VARCHAR(20) DEFAULT NULL
+) ENGINE=INNODB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+ALTER TABLE `user_type`
+  ADD PRIMARY KEY (`id`);
+ALTER TABLE `user_type`
+  MODIFY `id` INT(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11050000;
   
   CREATE TABLE `soc_divisions` (
   `id` INT(10) NOT NULL,
@@ -243,3 +257,19 @@ ALTER TABLE `soc_outlet`
   ADD PRIMARY KEY (`id`);
 ALTER TABLE `soc_outlet`
   MODIFY `id` INT(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15000;
+  
+CREATE TABLE product_stock (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    pro_id BIGINT NOT NULL,
+    batch_number VARCHAR(50) NOT NULL,
+    production_date DATE NOT NULL,
+    expiry_date DATE NOT NULL,
+    quantity_in_stock INT NOT NULL,
+    mrp DECIMAL(10, 2) NOT NULL,
+    dealer_price DECIMAL(10, 2) NOT NULL,
+    status ENUM('available', 'out_of_stock') NOT NULL,
+    create_by VARCHAR(50) NOT NULL,
+    create_date DATETIME NOT NULL,
+    update_by VARCHAR(50) DEFAULT NULL,
+    update_date DATETIME DEFAULT NULL
+);
